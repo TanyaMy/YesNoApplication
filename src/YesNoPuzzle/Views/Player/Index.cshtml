@@ -6,10 +6,11 @@
 @{
 
     <h1>There are @Model.Count games.</h1>
-    foreach (var g in Model)
+    <ul>
+    @foreach (var g in Model)
     {
-        <h4><a href="/Player/Game/@g.Id">@g.GameName</a></h4>
+        <li><h4><a href="/Player/Game/@g.Id">@g.GameName</a></h4></li>
     }
-
+    </ul>
 
 }
