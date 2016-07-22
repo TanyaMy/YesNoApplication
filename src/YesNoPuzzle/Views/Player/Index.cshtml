@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model ICollection<Game>
+@{
+
+    <h1>There are @Model.Count games.</h1>
+    foreach (var g in Model)
+    {
+        <h4><a href="/Player/Game/@g.Id">@g.GameName</a></h4>
+    }
+
+
+}
