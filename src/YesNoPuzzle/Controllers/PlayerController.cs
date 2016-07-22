@@ -112,7 +112,8 @@ namespace YesNoPuzzle.Controllers
 
        public async Task<IActionResult> Question()
         {
-           
+            if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
+            {
                 var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var games = await _db.Games
                     .Include(g => g.Questions)
@@ -124,7 +125,9 @@ namespace YesNoPuzzle.Controllers
                     t.Questions = t.Questions.Where(q => q.State == 0).ToList();
 
                 return View(games);
-            
+            }
+
+            return View();
         }
 
 
