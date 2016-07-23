@@ -14,11 +14,14 @@
     if (Model.Questions != null && Model.Questions.Count > 0)
     {
         <h4>Questions:</h4>
-
+        <hr/>
         foreach (var q in @Model.Questions)
         {
-            <p>@q.Text</p>
+            <span class="glyphicon glyphicon-question-sign"></span>
+            @q.Text
+            <hr/>
         }
+       
     }
     else
     {
