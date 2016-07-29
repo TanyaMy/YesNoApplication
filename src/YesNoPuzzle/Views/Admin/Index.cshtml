@@ -10,6 +10,7 @@
         else
          { <h1>There are @Model.Count games.</h1>}
     <br/>
+
         foreach (var g in Model)
         {
             <div style="display: inline">
@@ -19,6 +20,7 @@
                 </form>
                 <hr/>
             </div>
-        }
-
+    }
+    <br/>
+    <a href="/Admin/ShowAllGames" class="btn btn-info" role="button">Show all games</a>
 }

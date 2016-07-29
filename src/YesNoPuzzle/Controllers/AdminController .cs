@@ -82,12 +82,19 @@ namespace YesNoPuzzle.Controllers
             if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
             {
                 var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-                var games = await _db.Games.Where(u => u.User.Id == userId).ToListAsync();
+              
+                var games = await _db.Games.Where(u => u.User.Id == userId).ToListAsync();               
 
                 return View(games);
             }
             return View();    
+        }
+
+        public IActionResult ShowAllGames()
+        {
+            var games = _db.Games.ToList();
+
+            return View(games);
         }
 
         public async Task<IActionResult> AnswerYes(int? id)
@@ -145,6 +152,20 @@ namespace YesNoPuzzle.Controllers
                     t.Questions = t.Questions.Where(q => q.State == 0).ToList();
 
                 return View(games);            
+        }
+
+        public async Task<IActionResult> DeleteQuestion(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var question = _db.Questions.First(q => q.Id == id);
+
+            _db.Questions.Remove(question);
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Question", "Admin");
         }
 
         public IActionResult Rules()

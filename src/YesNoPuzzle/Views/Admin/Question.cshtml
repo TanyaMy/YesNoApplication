@@ -7,8 +7,7 @@
     {           
             <h1>
                 @g.GameName
-            </h1>
-                <a href="/Admin/GameOver/@g.Id" class="btn btn-info" role="button">Game over</a>
+            </h1>               
             
         if (g.Questions != null && g.Questions.Count > 0)
         {
@@ -19,9 +18,13 @@
                 <h4 class="col-lg-3">@(i + 1): @g.Questions[i].Text</h4>
                 <h5>@g.Questions[i].QuestionDate</h5>
                 <form asp-controller="Admin" method="post" display="inline">                 
-                    <a href="/Admin/AnswerYes/@g.Questions[i].Id" class="btn btn-success" role="button">Yes</a>
+                    <a href="/Admin/AnswerYes/@g.Questions[i].Id" class="btn btn-info" role="button">Yes</a>
                     <a href="/Admin/AnswerNo/@g.Questions[i].Id" class="btn btn-danger" role="button">No</a>
                     <a href="/Admin/AnswerNoMatter/@g.Questions[i].Id" class="btn btn-default" role="button">No matter</a>
+                    <a href="/Admin/GameOver/@g.Id" class="btn btn-success" role="button">Game over</a>
+                    <a href="/Admin/DeleteQuestion/@g.Questions[i].Id" class="btn btn-danger" role="button">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
                 </form>
                 <hr />
             }

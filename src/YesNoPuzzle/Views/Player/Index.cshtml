@@ -5,12 +5,16 @@
 @model ICollection<Game>
 @{
 
-    <h1>There are @Model.Count games.</h1>
+   @if (Model.Count == 1)
+   {<h1>There is @Model.Count game.</h1>}
+   else
+   { <h1>There are @Model.Count games.</h1>}
     <ul>
     @foreach (var g in Model)
     {
         <li><h4><a href="/Player/Game/@g.Id">@g.GameName</a></h4></li>
     }
     </ul>
-
+    <br/>
+    <a href="/Admin/Index" class="btn btn-info" role="button">Show my games</a>
 }

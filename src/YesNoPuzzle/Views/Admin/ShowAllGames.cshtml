@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using System.Threading.Tasks;
+
+@using YesNoPuzzle.Models;
+@using Microsoft.AspNetCore.Http
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model ICollection<Game>
+
+@if (Model != null)
+{
+    @if (Model.Count == 1)
+    {<h1>There is @Model.Count game.</h1>}
+    else
+    { <h1>There are @Model.Count games.</h1>}
+    <br />
+    <ul>
+    @foreach (var g in Model)
+    {
+        <li>
+            <div style="display: inline">            
+                <h4><a href="/player/Game/@g.Id">@g.GameName</a></h4>           
+            </div>
+        </li>
+    }
+    </ul>
+    <br />
+    <a href="/Admin/Index" class="btn btn-info" role="button">Show my games</a>
+}

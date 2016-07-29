@@ -6,8 +6,15 @@
 @model YesNoPuzzle.Models.GameViewModels.GameViewModel
 
 @{
-    <h2>@Model.Game.GameName</h2>
-    <h3>@Model.Game.GameCondition</h3>
+    <br/>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>@Model.Game.GameName</h2>
+        </div>
+        <div class="panel-body">
+            <h4>@Model.Game.GameCondition</h4>
+        </div>
+    </div>
 
     <hr/>
 
@@ -17,18 +24,35 @@
         <hr/>
         foreach (var q in @Model.Questions)
         {
-            @q.Text
-            <h5 class="col-lg-2">@q.QuestionDate</h5>
-            @if (q.State == 0)
-                {<span class="glyphicon glyphicon-hourglass col-lg-1"></span>}
-            else if (q.State == 1)
-                {<span class="glyphicon glyphicon-ok col-lg-1"></span>}
-            else if (q.State == 2)
-                {<span class="glyphicon glyphicon-remove col-lg-1"></span>}
-            else if (q.State == 3)
-                {<span class="glyphicon glyphicon-question-sign col-lg-1"></span>}
-           
-            <hr/>
+           @if (q.State == 0)
+           {
+            <div class="alert alert-dismissable">
+                @q.Text
+                <span class="glyphicon glyphicon-hourglass col-lg-1"></span>
+            </div>
+           }
+           else if (q.State == 1)
+           {
+            <div class="alert alert-success">
+                @q.Text
+                <span class="glyphicon glyphicon-ok col-lg-1"></span>
+            </div>
+           }
+           else if (q.State == 2)
+           {
+            <div class="alert alert-danger">
+                @q.Text
+                <span class="glyphicon glyphicon-remove col-lg-1"></span>
+            </div>
+           }
+           else if (q.State == 3)
+           {
+            <div class="alert alert-info">
+                @q.Text
+                <span class="glyphicon glyphicon-question-sign col-lg-1"></span>
+            </div>
+           }
+            
         }
        
     }
