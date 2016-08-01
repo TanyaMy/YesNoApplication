@@ -28,7 +28,9 @@ namespace YesNoPuzzle.Controllers
         {
             if(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == null)
             {
-                ICollection<Game> games = await _db.Games.ToListAsync();
+               List<Game> games = await _db.Games.ToListAsync();               
+                games.Sort(delegate (Game g1, Game g2)
+                { return g1.GameName.CompareTo(g2.GameName); });
                 return View(games);
             }
             return RedirectToAction("Index", "Admin");
@@ -62,9 +64,12 @@ namespace YesNoPuzzle.Controllers
             return View(gameViewModel);
         }
 
-        public async Task<IActionResult> AddNewQuestion(string text,int gameId)
+        public async Task<IActionResult> AddNewQuestion(string text,int gameId, string userId)
         {
             var game = _db.Games.FirstOrDefault(g => g.Id == gameId);
+
+            var user = _db.Users.FirstOrDefault(g => g.Id == userId);
+
 
             if (game == null)
             {
@@ -75,7 +80,8 @@ namespace YesNoPuzzle.Controllers
                 Text = text,
                 State = 0,
                 Game = game,
-                QuestionDate = DateTime.Now
+                QuestionDate = DateTime.Now,
+                User = game.User
             });
             await _db.SaveChangesAsync();
            

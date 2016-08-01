@@ -11,10 +11,12 @@
 
 @if (Model != null)
 {
-    @if (Model.Count == 1)
-    {<h1>There is @Model.Count game.</h1>}
-    else
-    { <h1>There are @Model.Count games.</h1>}
+   @if (Model.Count == 1)
+   {<h1>There is @Model.Count game.</h1>}
+   else if (Model.Count > 1)
+   { <h1>There are @Model.Count games.</h1>}
+   else
+   { <h1>There are no games.</h1>}
     <br />
     <ul>
     @foreach (var g in Model)
@@ -29,3 +31,9 @@
     <br />
     <a href="/Admin/Index" class="btn btn-info" role="button">Show my games</a>
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+</script>

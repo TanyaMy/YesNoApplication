@@ -5,9 +5,9 @@
 {
     foreach (Game g in Model)
     {           
-            <h1>
+            <h2>
                 @g.GameName
-            </h1>               
+            </h2>               
             
         if (g.Questions != null && g.Questions.Count > 0)
         {
@@ -31,8 +31,8 @@
         }
         else
         {
-            <br />
-            <h4>No questions yet for this game.</h4>
+           
+            <h5>No questions yet for this game.</h5>
         }
     }
 }

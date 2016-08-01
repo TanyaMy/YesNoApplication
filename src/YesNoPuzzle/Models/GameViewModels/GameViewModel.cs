@@ -18,6 +18,7 @@ namespace YesNoPuzzle.Models.GameViewModels
         public Game Game { get; set; }
 
         public int GameId { get; set; }
+
     }
 }
 

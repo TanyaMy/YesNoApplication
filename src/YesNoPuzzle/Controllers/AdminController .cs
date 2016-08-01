@@ -81,9 +81,11 @@ namespace YesNoPuzzle.Controllers
         {
             if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
             {
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-              
-                var games = await _db.Games.Where(u => u.User.Id == userId).ToListAsync();               
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;              
+                
+                var games = await _db.Games.Where(u => u.User.Id == userId).ToListAsync();
+                games.Sort(delegate (Game g1, Game g2)
+                { return g1.GameName.CompareTo(g2.GameName); });
 
                 return View(games);
             }
