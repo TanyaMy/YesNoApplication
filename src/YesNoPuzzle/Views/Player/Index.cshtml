@@ -12,11 +12,13 @@
    { <h1>There are @Model.Count games.</h1>}
    else
    { <h1>There are no games.</h1>}
-    <ul>
-    @foreach (var g in Model)
-    {
-        <li><h4><a href="/Player/Game/@g.Id">@g.GameName</a></h4></li>
-    }
-    </ul>
-    <br/>    
+    <div class="list-group">
+        @foreach (var g in Model)
+        {
+            <div style="display: inline">
+                <h3><a href="Player/Game/@g.Id" class="list-group-item">@g.GameName  <small>(By @g.UserName)</small></a></h3>
+            </div>
+        }
+    </div>
+        <br />
 }

@@ -18,18 +18,16 @@
    else
    { <h1>There are no games.</h1>}
     <br />
-    <ul>
-    @foreach (var g in Model)
-    {
-        <li>
-            <div style="display: inline">            
-                <h4><a href="/player/Game/@g.Id">@g.GameName</a></h4>           
-            </div>
-        </li>
-    }
-    </ul>
-    <br />
-    <a href="/Admin/Index" class="btn btn-info" role="button">Show my games</a>
+    <div class="list-group">
+        @foreach (var g in Model)
+        {            
+                <div style="display: inline">
+                    <h3><a href="/player/Game/@g.Id"  class="list-group-item">@g.GameName  <small> (By @g.UserName)</small></a></h3>                   
+                </div> 
+        }
+    </div>
+        <br />
+        <a href="/Admin/Index" class="btn btn-info" role="button">Show my games</a>
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>

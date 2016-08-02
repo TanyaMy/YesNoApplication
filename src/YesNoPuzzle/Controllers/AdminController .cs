@@ -27,7 +27,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            var game = _db.Games.First(g => g.Id == id);
+            var game = _db.Games.SingleOrDefault(g => g.Id == id);
 
             var questions = _db.Questions.Where(q => q.Game == game).ToList();
 
@@ -48,7 +48,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            var game = _db.Games.First(g => g.Id == id);
+            var game = _db.Games.SingleOrDefault(g => g.Id == id);
 
             game.GameState = false;
 
@@ -56,22 +56,25 @@ namespace YesNoPuzzle.Controllers
 
             return RedirectToAction(nameof(Index), "Admin");
         }
-
-
-        public async Task<IActionResult> CreateNewGame()
+        public IActionResult CreateNewGame()
         {
             return View();
         }
 
         public async Task<IActionResult> AddNewGame(GameViewModel model)
         {
-            _db.Games.Add(new Game()
-            {
-                GameName = model.GameName,
-                GameCondition = model.GameCondition,
-                GameState = true,
-                User = await _userManager.GetUserAsync(HttpContext.User)
-            });
+
+            var user = _db.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            if (model.GameCondition != null && model.GameName != null)
+                _db.Games.Add(new Game()
+                {
+                    GameName = model.GameName,
+                    GameCondition = model.GameCondition,
+                    GameState = true,
+                    User = await _userManager.GetUserAsync(HttpContext.User),
+                    UserName = user.Email
+                });
+         
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index), "Admin");
@@ -84,6 +87,7 @@ namespace YesNoPuzzle.Controllers
                 var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;              
                 
                 var games = await _db.Games.Where(u => u.User.Id == userId).ToListAsync();
+
                 games.Sort(delegate (Game g1, Game g2)
                 { return g1.GameName.CompareTo(g2.GameName); });
 
@@ -96,6 +100,9 @@ namespace YesNoPuzzle.Controllers
         {
             var games = _db.Games.ToList();
 
+            games.Sort(delegate (Game g1, Game g2)
+            { return g1.GameName.CompareTo(g2.GameName); });
+
             return View(games);
         }
 
@@ -104,7 +111,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            Question question = _db.Questions.First(q => q.Id == id);
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == id);
 
             question.State = 1;
 
@@ -118,7 +125,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            Question question = _db.Questions.First(q => q.Id == id);
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == id);
 
             question.State = 2;
 
@@ -132,7 +139,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            Question question = _db.Questions.First(q => q.Id == id);
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == id);
 
             question.State = 3;
 
@@ -149,7 +156,6 @@ namespace YesNoPuzzle.Controllers
                     .Where(g => g.User.Id == userId && g.GameState)
                     .ToListAsync();
 
-
                 foreach (var t in games)
                     t.Questions = t.Questions.Where(q => q.State == 0).ToList();
 
@@ -161,7 +167,7 @@ namespace YesNoPuzzle.Controllers
             if (id == null)
                 return NotFound();
 
-            var question = _db.Questions.First(q => q.Id == id);
+            var question = _db.Questions.SingleOrDefault(q => q.Id == id);
 
             _db.Questions.Remove(question);
 

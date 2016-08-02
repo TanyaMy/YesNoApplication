@@ -28,24 +28,24 @@ namespace YesNoPuzzle.Controllers
         {
             if(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == null)
             {
-               List<Game> games = await _db.Games.ToListAsync();               
+               List<Game> games = await _db.Games.ToListAsync();   
+                            
                 games.Sort(delegate (Game g1, Game g2)
                 { return g1.GameName.CompareTo(g2.GameName); });
+
                 return View(games);
             }
             return RedirectToAction("Index", "Admin");
         }
 
-        public async Task<IActionResult> CreateNewGame()
+        public IActionResult CreateNewGame()
         {
-           if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == null)// если пользователь незарегистрированный
-            return View();
+            // если пользователь незарегистрированный
+            if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == null)
+                return View();
             else
                 return RedirectToAction("CreateNewGame", "Admin");
         }
-     
-
-        
 
         public async Task<IActionResult> Game(int? id)
         {
@@ -64,32 +64,34 @@ namespace YesNoPuzzle.Controllers
             return View(gameViewModel);
         }
 
-        public async Task<IActionResult> AddNewQuestion(string text,int gameId, string userId)
+        public async Task<IActionResult> AddNewQuestion(string text,int gameId)
         {
-            var game = _db.Games.FirstOrDefault(g => g.Id == gameId);
+            var game = _db.Games.SingleOrDefault(g => g.Id == gameId);
 
-            var user = _db.Users.FirstOrDefault(g => g.Id == userId);
-
+            var user = _db.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
 
             if (game == null)
             {
                 return NotFound();
             }
-            _db.Questions.Add(new Question
-            {
-                Text = text,
-                State = 0,
-                Game = game,
-                QuestionDate = DateTime.Now,
-                User = game.User
-            });
+
+            if (text != null)
+                _db.Questions.Add(new Question
+                {
+                    Text = text,
+                    State = 0,
+                    Game = game,
+                    QuestionDate = DateTime.Now,
+                    UserName = (user == null) ? "Anonimus" : user.Email
+                });
+            
             await _db.SaveChangesAsync();
            
             return RedirectToAction("Game", new { id = gameId });
 
         }
 
-       public async Task<IActionResult> Question()
+        public IActionResult Question()
         {
             if (HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null)
             {
@@ -112,11 +114,6 @@ namespace YesNoPuzzle.Controllers
             ViewData["Message"] = "Our contact page.";
 
             return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
-        }
+        }      
     }
 }
