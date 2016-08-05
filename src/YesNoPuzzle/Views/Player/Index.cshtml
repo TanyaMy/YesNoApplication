@@ -13,11 +13,21 @@
    else
    { <h1>There are no games.</h1>}
     <div class="list-group">
+       
         @foreach (var g in Model)
         {
+            if (g.GameState == true)
+            {
             <div style="display: inline">
-                <h3><a href="Player/Game/@g.Id" class="list-group-item">@g.GameName  <small>(By @g.UserName)</small></a></h3>
+                <h3><a href="player/Game/@g.Id" class="list-group-item">@g.GameName  <small>(By @g.UserName)</small></a></h3>                
             </div>
+            }
+            else
+            {
+                <div style="display: inline">
+                    <h3><a href="player/Game/@g.Id" class="list-group-item">@g.GameName  (Game Over) <small>(By @g.UserName)</small></a></h3>
+                </div>
+            }
         }
     </div>
         <br />

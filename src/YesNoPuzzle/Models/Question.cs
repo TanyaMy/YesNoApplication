@@ -13,6 +13,8 @@ namespace YesNoPuzzle.Models
         public string UserName { get; set; }      
 
         public Game Game { get; set; }
+
+        public int GameId { get; set; }
         
         [Required]
         [Display(Name = "Question")]

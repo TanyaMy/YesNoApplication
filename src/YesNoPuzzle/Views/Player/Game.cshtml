@@ -1,7 +1,7 @@
 ﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using YesNoPuzzle.Models
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Game Page";
 }
 @model YesNoPuzzle.Models.GameViewModels.GameViewModel
 <style>
@@ -23,7 +23,7 @@
             <h3>@Model.Game.GameName <small> (By @Model.Game.UserName)</small></h3>           
         </div>
         <div class="panel-body">
-            <h4>@Model.Game.GameCondition</h4>
+            <h4>@Model.Game.GameCondition</h4>           
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         {
            @if (q.State == 0)
            {
-            <div class="alert alert-dismissable">
+            <div  style="background-color: lightgray" class="alert alert-dismissable">
                 <span class="glyphicon glyphicon-hourglass col-lg-1"></span>
                 <p><h5>@q.UserName :</h5></p>
                 <hr />
@@ -95,7 +95,8 @@
     else
     {
         <h2>Game over:)</h2>
-
+        <h2>Right solution</h2>
+        <h4>@Model.Game.GameSolution</h4>
     }
     </div>
 
@@ -106,3 +107,4 @@
         window.scrollTo(0, document.body.scrollHeight);
     });
 </script>
+

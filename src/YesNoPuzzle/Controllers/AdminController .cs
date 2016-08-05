@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YesNoPuzzle.Models;
 using YesNoPuzzle.Models.GameViewModels;
+using Microsoft.AspNetCore.Routing;
+using System;
 
 namespace YesNoPuzzle.Controllers
 {
@@ -43,38 +45,69 @@ namespace YesNoPuzzle.Controllers
             return RedirectToAction(nameof(Index), "Admin");
         }
 
-        public async Task<IActionResult> GameOver(int? id)
+        public async Task<IActionResult> GameOver(int? id, string userName)
         {
-            if (id == null)
-                return NotFound();
+            if (id == null || userName == null)
+                throw new Exception("Dubasja");
 
             var game = _db.Games.SingleOrDefault(g => g.Id == id);
+
+            var user = _db.Users.SingleOrDefault(u => u.UserName == userName);
+
+            if(user != null)
+            user.SolvedGamesCount++;
 
             game.GameState = false;
 
             await _db.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index), "Admin");
+            return RedirectToAction("Question", "Admin");
         }
         public IActionResult CreateNewGame()
         {
             return View();
         }
 
+        public async Task<IActionResult> EditGame(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var game = await _db.Games.Include(g => g.Questions).SingleOrDefaultAsync(g => g.Id == id);          
+
+            return View(game);
+        }
+
         public async Task<IActionResult> AddNewGame(GameViewModel model)
         {
-
             var user = _db.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
             if (model.GameCondition != null && model.GameName != null)
                 _db.Games.Add(new Game()
                 {
                     GameName = model.GameName,
                     GameCondition = model.GameCondition,
+                    GameSolution = model.GameSolution, 
                     GameState = true,
                     User = await _userManager.GetUserAsync(HttpContext.User),
                     UserName = user.Email
                 });
+            
          
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index), "Admin");
+        }        
+        public async Task<IActionResult> EditGameAction(int id, GameViewModel model)
+        {            
+            var game = _db.Games.SingleOrDefault(g => g.Id == id);
+                      
+            if (model.GameCondition != null && model.GameName != null)
+            {
+                game.GameName = model.GameName;
+                game.GameCondition = model.GameCondition;
+                game.GameSolution = model.GameSolution;
+            }
+
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index), "Admin");
@@ -104,7 +137,7 @@ namespace YesNoPuzzle.Controllers
             { return g1.GameName.CompareTo(g2.GameName); });
 
             return View(games);
-        }
+        }      
 
         public async Task<IActionResult> AnswerYes(int? id)
         {
@@ -146,6 +179,48 @@ namespace YesNoPuzzle.Controllers
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Question", "Admin");
+        }
+
+        public async Task<IActionResult> AnswerYesEdit(int? iD)
+        {
+            if (iD == null)
+                return NotFound();
+
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == iD);            
+
+            question.State = 1;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("EditGame", "Admin", new { id = question.GameId });
+        }
+
+        public async Task<IActionResult> AnswerNoEdit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == id);
+
+            question.State = 2;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("EditGame", "Admin", new { id = question.GameId });
+        }
+
+        public async Task<IActionResult> AnswerNoMatterEdit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            Question question = _db.Questions.SingleOrDefault(q => q.Id == id);
+
+            question.State = 3;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("EditGame", "Admin", new { id = question.GameId });
         }
 
         public async Task<IActionResult> Question()

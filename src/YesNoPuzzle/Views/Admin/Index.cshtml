@@ -15,13 +15,16 @@
 
         foreach (var g in Model)
         {
-            <div style="display: inline">
-                <form asp-controller="Admin" asp-action="deleteGame" method="post" display="inline">
+            <div style="display: inline">               
                     <h4 class="col-lg-4"><a href="/player/Game/@g.Id">@g.GameName</a></h4>
-                    <a href="/Admin/DeleteGame/@g.Id" class="btn btn-danger" role="button">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>   
-                        </a>                   
-                </form>
+                    
+                <a href="/Admin/EditGame/@g.Id" class="btn btn-info" role="button">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </a>
+                <a href="/Admin/DeleteGame/@g.Id" class="btn btn-danger" role="button">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+
                 <hr/>
             </div>
     }

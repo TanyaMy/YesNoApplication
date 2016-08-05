@@ -10,6 +10,7 @@ using YesNoPuzzle.Models;
 using YesNoPuzzle.Models.GameViewModels;
 using System;
 
+
 namespace YesNoPuzzle.Controllers
 {
     public class PlayerController : Controller
@@ -89,6 +90,16 @@ namespace YesNoPuzzle.Controllers
            
             return RedirectToAction("Game", new { id = gameId });
 
+        }
+
+        public async Task<IActionResult> Rating()
+        {
+            List<ApplicationUser> users = await _db.Users.ToListAsync();
+
+            users.Sort(delegate (ApplicationUser u1, ApplicationUser u2)
+            { return u2.SolvedGamesCount.CompareTo(u1.SolvedGamesCount); });
+
+            return View(users);
         }
 
         public IActionResult Question()

@@ -8,9 +8,10 @@ using YesNoPuzzle.Data;
 namespace YesNoPuzzle.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160803113558_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -188,8 +189,6 @@ namespace YesNoPuzzle.Migrations
                     b.Property<string>("GameSolution");
 
                     b.Property<bool>("GameState");
-
-                    b.Property<int>("SolvedGamesCount");
 
                     b.Property<string>("UserId");
 
